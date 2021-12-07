@@ -36,6 +36,7 @@ public class Category {
 
     public void setStore(Store store){
         this.store = store;
+        store.getCategories().add(this);
     }
 
     public void addItem(Item item){

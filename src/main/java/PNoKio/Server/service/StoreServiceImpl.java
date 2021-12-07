@@ -2,13 +2,13 @@ package PNoKio.Server.service;
 
 import PNoKio.Server.domain.Category;
 import PNoKio.Server.domain.Store;
+import PNoKio.Server.repository.CategoryRepository;
 import PNoKio.Server.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -16,6 +16,7 @@ import java.util.Optional;
 public class StoreServiceImpl implements StoreService{
 
     private final StoreRepository storeRepository;
+    private final CategoryRepository categoryRepository;
 
     @Override
     public Long saveStore(Store store) {
@@ -24,8 +25,11 @@ public class StoreServiceImpl implements StoreService{
     }
 
     @Override
-    public void addCategory(Long storeId, Category category) {
+    public void addCategory(Long storeId, Long categoryId) {
+        // 엔티티 조회
         Store store = storeRepository.findById(storeId).get();
+        Category category = categoryRepository.findById(categoryId).get();
+
         store.addCategory(category);
     }
 
