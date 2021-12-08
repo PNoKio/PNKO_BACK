@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/header :: header">
+    <title>Hello</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+
+<body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+
+    <form role="form" action="/stores/new" th:object="${storeForm}"
+          method="post">
+        <div class="form-group">
+            <label th:for="storeName">매장 이름</label>
+            <input type="text" th:field="*{storeName}" class="form-control" placeholder="매장 이름을 입력하세요"
+                   th:class="${#fields.hasErrors('storeName')}? 'form-control fieldError' : 'form-control'">
+            <p th:if="${#fields.hasErrors('storeName')}"
+               th:errors="*{storeName}">Incorrect date</p>
+        </div>
+        <div class="form-group">
+            <label th:for="branch">지점</label>
+            <input type="text" th:field="*{branch}" class="form-control" placeholder="지점을 입력하세요"
+                   th:class="${#fields.hasErrors('branch')}? 'form-control fieldError' : 'form-control'">
+            <p th:if="${#fields.hasErrors('branch')}"
+               th:errors="*{branch}">Incorrect date</p>
+        </div>
+        <div class="form-group">
+            <label th:for="owner">오너</label> <br/>
+            <select>
+                <option th:each="ow : ${owners}" th:text="${ow}"></option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">매장 등록</button>
+    </form>
+    <br/>
+    <div th:replace="fragments/footer :: footer"/>
+</div> <!-- /container -->
+</body>
+</html>
