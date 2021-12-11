@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/header :: header">
+  <title>Hello</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+
+<body>
+<div class="container">
+  <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+  <div>
+
+    <div class="table table-striped">
+      <tr>
+        <th th:text="${store.storeName}"></th>
+        <th th:text="${store.branch}">메뉴명</th>
+        <th th:text="${store.owner}">가격</th>
+        <a class="btn btn-lg btn-primary btn-sm" th:href="@{/stores/update(storeId=${store.storeId})}">매장 수정</a>
+        <a class="btn btn-lg btn-primary btn-sm" th:href="@{/stores/delete(storeId=${store.storeId})}">매장 삭제</a>
+        <a class="btn btn-lg btn-success btn-sm" th:href="@{/items/new(storeId=${store.storeId})}">메뉴 추가</a>
+      </tr>
+    </div>
+
+
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>카테고리</th>
+        <th>메뉴명</th>
+        <th>가격</th>
+        <th>상태</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="item : ${items}">
+        <!-- ? : null 이면 표시 안함-->
+        <td th:text="${item.category.getCategoryName()}"></td>
+        <td th:text="${item.itemName}"></td>
+        <td th:text="${item.price}"></td>
+        <td th:text="${item.status}"></td>
+        <td>
+          <a class="btn btn-lg btn-secondary btn-sm" th:href="@{/items/update(storeId=${store.storeId})}">수정</a>
+          <a class="btn btn-lg btn-danger btn-sm" th:href="@{/items/delete(storeId=${store.storeId})}">삭제</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div th:replace="fragments/footer :: footer"/>
+</div> <!-- /container -->
+</body>
+</html>

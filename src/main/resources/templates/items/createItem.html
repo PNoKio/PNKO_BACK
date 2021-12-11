@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/header :: header">
+  <title>Hello</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+
+<body>
+<div class="container">
+  <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+
+  <form role="form" action="/stores/new" th:object="${itemForm}"
+        method="post">
+    <div class="form-group">
+      <label th:for="storeName">메뉴명</label>
+      <input type="text" th:field="*{itemName}" class="form-control" placeholder="메뉴명을 입력하세요"
+             th:class="${#fields.hasErrors('itemName')}? 'form-control fieldError' : 'form-control'">
+      <p th:if="${#fields.hasErrors('itemName')}"
+         th:errors="*{itemName}">Incorrect date</p>
+    </div>
+    <div class="form-group">
+      <label th:for="branch">가격</label>
+      <input type="text" th:field="*{price}" class="form-control" placeholder="가격을 입력하세요"
+             th:class="${#fields.hasErrors('price')}? 'form-control fieldError' : 'form-control'">
+      <p th:if="${#fields.hasErrors('price')}"
+         th:errors="*{price}">Incorrect date</p>
+    </div>
+    <div class="form-group">
+      <label th:for="branch">카테고리</label>
+      <select class="selectpicker">
+        <option th:each="category : ${categories}"
+                th:value="${category.getId()}"
+                th:utext="${category.getCategoryName()}"></option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label th:for="branch">상태</label>
+      <select class="selectpicker">
+        <option th:each="val : ${status}"
+                th:value="${val}"
+                th:utext="${val.toString()}"></option>
+      </select>
+    </div>
+
+
+    <button type="submit" class="btn btn-primary">매장 등록</button>
+
+  </form>
+  <br/>
+  <div th:replace="fragments/footer :: footer"/>
+</div> <!-- /container -->
+</body>
+</html>
