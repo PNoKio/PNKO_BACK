@@ -5,7 +5,7 @@ import PNoKio.Server.dto.OwnerDto;
 import PNoKio.Server.exception.EmailDuplicateException;
 import PNoKio.Server.repository.OwnerRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.apache.catalina.authenticator.BasicAuthenticator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,14 +14,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class OwnerServiceImpl implements OwnerService{
 
-    private final PasswordEncoder passwordEncoder;
     private final OwnerRepository ownerRepository;
 
 
     @Override
+    @Transactional
     public void create(OwnerDto ownerDto) throws RuntimeException{
-        String encodePassword = passwordEncoder.encode(ownerDto.getPassword());
-
         ownerRepository.findByEmail(ownerDto.getEmail())
                 .ifPresent(
                         m -> {
@@ -31,15 +29,20 @@ public class OwnerServiceImpl implements OwnerService{
         Owner owner = Owner.builder()
                 .ownerName(ownerDto.getOwnerName())
                 .email(ownerDto.getEmail())
-                .password(encodePassword)
+                .password(ownerDto.getPassword())
                 .build();
         ownerRepository.save(owner);
     }
 
     @Override
+    @Transactional
     public Owner login(OwnerDto ownerDto) {
-        return ownerRepository.findByEmail(ownerDto.getEmail())
-                .orElse(null);
-
+        Owner owner = ownerRepository.findByEmail(ownerDto.getEmail()).orElseThrow(() -> {
+            throw new IllegalStateException("아이디나 비밀번호가 틀렸습니다.");
+        });
+        if(!owner.getPassword().equals(ownerDto.getPassword())){
+            throw new IllegalStateException("아이디나 비밀번호가 틀렸습니다.");
+        }
+        return owner;
     }
 }
