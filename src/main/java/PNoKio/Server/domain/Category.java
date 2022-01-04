@@ -15,36 +15,33 @@ import java.util.List;
 public class Category {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "category_id")
     private Long id;
 
     private String categoryName;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
     private Store store;
 
     @OneToMany(mappedBy = "category")
-    private List<Item> items;
+    private List<Item> items = new ArrayList<>();
 
-    @Builder
-    public Category(String categoryName) {
-        this.categoryName = categoryName;
-        items = new ArrayList<Item>();
+    private void setStore(Store store){
+        this.store =store;
     }
 
-    public void setStore(Store store){
-        this.store = store;
-        store.getCategories().add(this);
+    private void addCategory(){
+        this.store.getCategories().add(this);
     }
 
-    public void addItem(Item item){
-        items.add(item);
-        item.setCategory(this);
+    public static Category createCategory(Store store, String categoryName){
+        Category category = new Category();
+        category.setStore(store);
+        category.addCategory();
+        category.categoryName=categoryName;
+        return category;
     }
 
-    public void removeItem(Long itemId) {
-        // 제거 알고리즘
-    }
 }
