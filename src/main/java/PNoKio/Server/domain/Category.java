@@ -1,5 +1,7 @@
 package PNoKio.Server.domain;
 
+import PNoKio.Server.dto.CategoryDto;
+import PNoKio.Server.dto.CategoryUpdateDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,6 +36,10 @@ public class Category {
 
     private void addCategory(){
         this.store.getCategories().add(this);
+    }
+
+    public void change(CategoryUpdateDto categoryUpdateDto){
+        this.categoryName=categoryUpdateDto.getCategoryName();
     }
 
     public static Category createCategory(Store store, String categoryName){

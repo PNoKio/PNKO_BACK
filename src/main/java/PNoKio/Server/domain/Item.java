@@ -1,5 +1,6 @@
 package PNoKio.Server.domain;
 
+import PNoKio.Server.dto.ItemUpdateDto;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,21 +30,17 @@ public class Item {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @Builder
-    public Item(Long id, String itemName, int price, ItemStatus status, Category category) {
-        this.id = id;
-        this.itemName = itemName;
-        this.price = price;
-        this.status = status;
-        this.category = category;
-    }
-
     private void setCategory(Category category) {
         this.category = category;
     }
 
     private void addItem(){
         this.category.getItems().add(this);
+    }
+
+    public void change(ItemUpdateDto itemUpdateDto){
+        this.itemName=itemUpdateDto.getItemName();
+        this.price=itemUpdateDto.getPrice();
     }
 
     public static Item createItem(Category category, String itemName, int price){
