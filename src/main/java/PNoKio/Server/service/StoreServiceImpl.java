@@ -1,5 +1,6 @@
 package PNoKio.Server.service;
 
+import PNoKio.Server.argumentresolver.SessionDto;
 import PNoKio.Server.domain.Owner;
 import PNoKio.Server.domain.Store;
 import PNoKio.Server.dto.OwnerDto;
@@ -28,8 +29,8 @@ public class StoreServiceImpl implements StoreService{
     }
 
     @Override
-    public void addStore(StoreDto storeDto, OwnerDto ownerDto) {
-        Owner owner = ownerRepository.findByEmail(ownerDto.getEmail()).get();
+    public void addStore(StoreDto storeDto, SessionDto sessionDto) {
+        Owner owner = ownerRepository.findByEmail(sessionDto.getEmail()).get();
         Store store = Store.createStore(owner, storeDto.getStoreName(), storeDto.getBranch());
         storeRepository.findByStoreNameAndStoreBranch(storeDto.getStoreName(), storeDto.getBranch()).ifPresent(
                 a -> {

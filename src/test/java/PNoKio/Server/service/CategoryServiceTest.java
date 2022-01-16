@@ -10,7 +10,6 @@ import PNoKio.Server.dto.StoreDto;
 import PNoKio.Server.exception.DuplicateCategoryNameInStore;
 import PNoKio.Server.repository.CategoryRepository;
 import PNoKio.Server.repository.StoreRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional

@@ -6,7 +6,6 @@ import PNoKio.Server.dto.OwnerDto;
 import PNoKio.Server.exception.EmailDuplicateException;
 import PNoKio.Server.repository.OwnerRepository;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.authenticator.BasicAuthenticator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +19,7 @@ public class OwnerServiceImpl implements OwnerService{
 
     @Override
     @Transactional
-    public void create(OwnerDto ownerDto) throws RuntimeException{
+    public Long create(OwnerDto ownerDto) throws RuntimeException{
         ownerRepository.findByEmail(ownerDto.getEmail())
                 .ifPresent(
                         m -> {
@@ -32,7 +31,7 @@ public class OwnerServiceImpl implements OwnerService{
                 .email(ownerDto.getEmail())
                 .password(ownerDto.getPassword())
                 .build();
-        ownerRepository.save(owner);
+        return ownerRepository.save(owner).getId();
     }
 
     @Override

@@ -32,7 +32,7 @@ public class OwnerController {
     }
 
     @PostMapping("/signup")
-    public String save(@Validated @ModelAttribute(name = "ownerDto")OwnerDto ownerDto, BindingResult bindingResult ){
+    public String save(@Validated @ModelAttribute(name = "ownerDto") OwnerDto ownerDto, BindingResult bindingResult ){
 
         if(bindingResult.hasErrors()){
             bindingResult.reject("loginFail", "아이디 양식은 email 입니다.");
@@ -63,7 +63,7 @@ public class OwnerController {
             return "/loginForm";
         }
         HttpSession session = request.getSession();
-        session.setAttribute(SessionConst.LOGIN_MEMBER,owner);
+        session.setAttribute(SessionConst.LOGIN_MEMBER,new PNoKio.Server.argumentresolver.SessionDto(owner.getId(),owner.getEmail()));
         return "redirect:"+redirectURL;
     }
 

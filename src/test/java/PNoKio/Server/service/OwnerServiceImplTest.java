@@ -3,16 +3,12 @@ package PNoKio.Server.service;
 import PNoKio.Server.domain.Owner;
 import PNoKio.Server.dto.LoginDto;
 import PNoKio.Server.dto.OwnerDto;
-import PNoKio.Server.dto.StoreDto;
 import PNoKio.Server.exception.EmailDuplicateException;
 import PNoKio.Server.repository.OwnerRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.DuplicateFormatFlagsException;
 
 import static org.assertj.core.api.Assertions.*;
 

@@ -1,8 +1,6 @@
 package PNoKio.Server.argumentresolver;
 
 
-import PNoKio.Server.domain.Owner;
-import PNoKio.Server.dto.OwnerDto;
 import PNoKio.Server.session.SessionConst;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
@@ -22,7 +20,7 @@ public class LoginArgumentResolver implements HandlerMethodArgumentResolver {
         log.info("supportsParameter 실행");
 
         boolean hasLoginAnnotation = parameter.hasParameterAnnotation(Login.class);
-        boolean hasOwnerType = OwnerDto.class.isAssignableFrom(parameter.getParameterType());
+        boolean hasOwnerType = SessionDto.class.isAssignableFrom(parameter.getParameterType());
 
         return hasLoginAnnotation && hasOwnerType;
     }

@@ -1,25 +1,20 @@
 package PNoKio.Server.controller;
 
-import PNoKio.Server.domain.Store;
-import PNoKio.Server.dto.OwnerDto;
-import PNoKio.Server.dto.StoreDto;
+import PNoKio.Server.argumentresolver.Login;
+import PNoKio.Server.argumentresolver.SessionDto;
 import PNoKio.Server.service.StoreService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Controller
 @Slf4j
@@ -29,7 +24,7 @@ public class StoreController {
 
     private final StoreService storeService;
 
-    @GetMapping("")
+    @GetMapping("/")
     public String home(Model model){
         // 매장 목록 반환
         List<StoreDto> stores = storeService.findStores().stream().map(input ->
@@ -38,7 +33,7 @@ public class StoreController {
                         input.getBranch(),
                         input.getOwner().toString())).collect(Collectors.toList());
         model.addAttribute("stores", stores);
-        return "home";
+        return "/home";
     }
 
     @GetMapping("/new")
@@ -55,21 +50,14 @@ public class StoreController {
     }
 
     @PostMapping("/new")
-    public String createStore(StoreForm form) {
+    public String createStore(StoreForm form, @Login SessionDto sessionDto) {
         PNoKio.Server.dto.StoreDto store = new PNoKio.Server.dto.StoreDto(
                 form.storeName,
                 form.branch
         );
+        storeService.addStore(store, sessionDto);
 
-        OwnerDto owner = new OwnerDto(
-                "yoonho@gmail.com",
-                "윤호",
-                "1234"
-        );
-
-        storeService.addStore(store, owner);
-
-        return "redirect:/stores";
+        return "redirect:/";
     }
 
     @Data

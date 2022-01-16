@@ -1,5 +1,6 @@
 package PNoKio.Server.service;
 
+import PNoKio.Server.argumentresolver.SessionDto;
 import PNoKio.Server.domain.Owner;
 import PNoKio.Server.domain.Store;
 import PNoKio.Server.dto.OwnerDto;
@@ -8,7 +9,6 @@ import PNoKio.Server.dto.StoreUpdateDto;
 import PNoKio.Server.exception.DuplicateStoreAndBranch;
 import PNoKio.Server.repository.OwnerRepository;
 import PNoKio.Server.repository.StoreRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -36,9 +36,8 @@ public class StoreServiceImplTest {
     @Test
     void addStoreSuccessTest(){
         Owner owner1 = makeOwner("kim", "rkdlem48", "asdf");
-        ownerService.create(new OwnerDto(owner1.getEmail(),owner1.getOwnerName(),owner1.getPassword()));
-        storeservice.addStore(new StoreDto("스타벅스", "상명")
-                ,new OwnerDto(owner1.getEmail(),owner1.getOwnerName(), owner1.getPassword()));
+        Long aLong = ownerService.create(new OwnerDto(owner1.getEmail(), owner1.getOwnerName(), owner1.getPassword()));
+        storeservice.addStore(new StoreDto("스타벅스", "상명"),new SessionDto());
         Store store = storeRepository.findByStoreNameAndStoreBranch("스타벅스", "상명").get();
         Owner owner = ownerRepository.findByEmail("rkdlem48").get();
         assertThat(store.getOwner()).isEqualTo(owner);
@@ -48,19 +47,19 @@ public class StoreServiceImplTest {
     @Test
     void addStoreFailDuplicateStoreNameAndBranchTest(){
         Owner owner1 = makeOwner("kim", "rkdlem48", "asdf");
-        ownerService.create(new OwnerDto(owner1.getEmail(),owner1.getOwnerName(),owner1.getPassword()));
+        Long aLong = ownerService.create(new OwnerDto(owner1.getEmail(), owner1.getOwnerName(), owner1.getPassword()));
         storeservice.addStore(new StoreDto("스타벅스", "상명")
-                ,new OwnerDto(owner1.getEmail(),owner1.getOwnerName(), owner1.getPassword()));
+                ,new SessionDto(aLong,owner1.getEmail()));
         assertThatThrownBy(() -> storeservice.addStore(new StoreDto("스타벅스", "상명")
-                ,new OwnerDto(owner1.getEmail(),owner1.getOwnerName(), owner1.getPassword()))).isInstanceOf(DuplicateStoreAndBranch.class);
+                ,new SessionDto(aLong,owner1.getEmail()))).isInstanceOf(DuplicateStoreAndBranch.class);
     }
 
     @Test
     void removeStore(){
         Owner owner1 = makeOwner("kim", "rkdlem48", "asdf");
-        ownerService.create(new OwnerDto(owner1.getEmail(),owner1.getOwnerName(),owner1.getPassword()));
+        Long aLong = ownerService.create(new OwnerDto(owner1.getEmail(), owner1.getOwnerName(), owner1.getPassword()));
         storeservice.addStore(new StoreDto("스타벅스", "상명")
-                ,new OwnerDto(owner1.getEmail(),owner1.getOwnerName(), owner1.getPassword()));
+                ,new SessionDto(aLong,owner1.getEmail()));
 
 
         List<Store> all = storeRepository.findAll();
@@ -79,23 +78,25 @@ public class StoreServiceImplTest {
     @Test
     void updateSuccessStore(){
         Owner owner1 = makeOwner("kim", "rkdlem48", "asdf");
-        ownerService.create(new OwnerDto(owner1.getEmail(),owner1.getOwnerName(),owner1.getPassword()));
+        Long aLong = ownerService.create(new OwnerDto(owner1.getEmail(), owner1.getOwnerName(), owner1.getPassword()));
         storeservice.addStore(new StoreDto("스타벅스", "상명")
-                ,new OwnerDto(owner1.getEmail(),owner1.getOwnerName(), owner1.getPassword()));
+                ,new SessionDto(aLong,owner1.getEmail()));
 
         Long storeId = storeRepository.findByStoreNameAndStoreBranch("스타벅스", "상명").get().getId();
 
         storeservice.UpdateStore(storeId,new StoreUpdateDto("스타벅스","국민대"));
     }
+
     @Test
     void updateFailStore(){
         Owner owner1 = makeOwner("kim", "rkdlem48", "asdf");
-        ownerService.create(new OwnerDto(owner1.getEmail(),owner1.getOwnerName(),owner1.getPassword()));
+        Long aLong = ownerService.create(new OwnerDto(owner1.getEmail(), owner1.getOwnerName(), owner1.getPassword()));
 
         storeservice.addStore(new StoreDto("스타벅스", "상명")
-                ,new OwnerDto(owner1.getEmail(),owner1.getOwnerName(), owner1.getPassword()));
+                ,new SessionDto(aLong,owner1.getEmail()));
+
         storeservice.addStore(new StoreDto("스타벅스", "국민")
-                ,new OwnerDto(owner1.getEmail(),owner1.getOwnerName(), owner1.getPassword()));
+                ,new SessionDto(aLong,owner1.getEmail()));
 
         Long storeId = storeRepository.findByStoreNameAndStoreBranch("스타벅스", "상명").get().getId();
 

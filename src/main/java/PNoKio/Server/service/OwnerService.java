@@ -7,6 +7,6 @@ import PNoKio.Server.dto.OwnerDto;
 public interface OwnerService{
 
 
-    void create(OwnerDto ownerDto);
+    Long create(OwnerDto ownerDto);
     Owner login(LoginDto loginDto);
 }
