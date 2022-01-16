@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @Controller
 @Slf4j
+@RequestMapping("/item")
 public class ItemController {
 
     @GetMapping("/items")
@@ -27,10 +29,10 @@ public class ItemController {
         model.addAttribute("store", store);
 
         List<Item> items = new ArrayList<>();
-        Category iceCoffee = new Category("커피(ice)");
+//        Category iceCoffee = new Category("커피(ice)");
 
-        items.add(new Item(1L, "아이스 아메리카노", 4500, ItemStatus.ON_SALE, iceCoffee));
-        items.add(new Item(2L, "아이스 카페라떼", 5000, ItemStatus.ON_SALE, iceCoffee));
+//        items.add(new Item(1L, "아이스 아메리카노", 4500, ItemStatus.ON_SALE, iceCoffee));
+//        items.add(new Item(2L, "아이스 카페라떼", 5000, ItemStatus.ON_SALE, iceCoffee));
 
         model.addAttribute("items", items);
 
@@ -40,8 +42,8 @@ public class ItemController {
     @GetMapping("/items/new")
     public String createItem(Model model, @RequestParam Long storeId) {
         List<Category> categories = new ArrayList<>();
-        categories.add(new Category("커피(ice)"));
-        categories.add(new Category("커피(hot)"));
+//        categories.add(new Category("커피(ice)"));
+//        categories.add(new Category("커피(hot)"));
 
         model.addAttribute("categories", categories);
         model.addAttribute("status", ItemStatus.values());
