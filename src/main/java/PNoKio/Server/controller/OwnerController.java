@@ -1,6 +1,7 @@
 package PNoKio.Server.controller;
 
 import PNoKio.Server.domain.Owner;
+import PNoKio.Server.dto.LoginDto;
 import PNoKio.Server.dto.OwnerDto;
 import PNoKio.Server.service.OwnerService;
 import PNoKio.Server.session.SessionConst;
@@ -25,28 +26,41 @@ public class OwnerController {
         return "/home";
     }
 
+    @GetMapping("/signup")
+    public String signup(@ModelAttribute (name = "ownerDto") OwnerDto ownerDto){
+        return "/ownerForm";
+    }
+
+    @PostMapping("/signup")
+    public String save(@Validated @ModelAttribute(name = "ownerDto")OwnerDto ownerDto, BindingResult bindingResult ){
+
+        if(bindingResult.hasErrors()){
+            bindingResult.reject("loginFail", "아이디 양식은 email 입니다.");
+            return "/ownerForm";
+        }
+        ownerService.create(ownerDto);
+        return "redirect:/";
+    }
 
 
 
     @GetMapping("/login")
-    public String loginForm(@ModelAttribute("OwnerDto") OwnerDto ownerDto){
-        return "/login/Form";
+    public String loginForm(@ModelAttribute("loginDto") LoginDto loginDto){
+        return "/loginForm";
     }
 
-
     @PostMapping("/login")
-    public String login(@Validated OwnerDto ownerDto, BindingResult bindingResult,
+    public String login(@Validated @ModelAttribute(name = "loginDto")LoginDto loginDto, BindingResult bindingResult,
                         @RequestParam(defaultValue = "/") String redirectURL,
                         HttpServletRequest request){
         if(bindingResult.hasErrors()){
-            return "login/loginForm";
+            return "/loginForm";
         }
 
-        Owner owner = ownerService.login(ownerDto);
-
-        if(owner ==null){
-            bindingResult.reject("loginFail","아이디 또는 비밀번호가 맞지 않습니다.");
-            return "login/loginForm";
+        Owner owner = ownerService.login(loginDto);
+        if(owner ==null ){
+            bindingResult.reject("loginFail","아이디 혹은 비밀번호가 틀렸습니다.");
+            return "/loginForm";
         }
         HttpSession session = request.getSession();
         session.setAttribute(SessionConst.LOGIN_MEMBER,owner);
@@ -59,13 +73,6 @@ public class OwnerController {
         if(session!=null){
             session.invalidate();
         }
-        return "redirect:/";
-    }
-
-
-    @GetMapping("/signup")
-    public String signup(@Validated OwnerDto ownerDto){
-        ownerService.create(ownerDto);
-        return "/home";
+        return "redirect:/loginForm";
     }
 }

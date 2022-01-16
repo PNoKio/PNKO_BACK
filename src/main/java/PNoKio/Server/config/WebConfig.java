@@ -1,6 +1,7 @@
 package PNoKio.Server.config;
 
 import PNoKio.Server.argumentresolver.LoginArgumentResolver;
+import PNoKio.Server.interceptor.LoginInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,9 +22,9 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LocaleChangeInterceptor())
+        registry.addInterceptor(new LoginInterceptor())
                 .order(1)
-                .addPathPatterns("/**")
-                .excludePathPatterns("/login","/css/**","/*.ico","/error");
+                .addPathPatterns("/store/**","/owner/**","/")
+                .excludePathPatterns("/login","/css/**","/*.ico","/error","/signup");
     }
 }

@@ -1,6 +1,7 @@
 package PNoKio.Server.service;
 
 import PNoKio.Server.domain.Owner;
+import PNoKio.Server.dto.LoginDto;
 import PNoKio.Server.dto.OwnerDto;
 import PNoKio.Server.exception.EmailDuplicateException;
 import PNoKio.Server.repository.OwnerRepository;
@@ -36,11 +37,11 @@ public class OwnerServiceImpl implements OwnerService{
 
     @Override
     @Transactional
-    public Owner login(OwnerDto ownerDto) {
-        Owner owner = ownerRepository.findByEmail(ownerDto.getEmail()).orElseThrow(() -> {
+    public Owner login(LoginDto loginDto) {
+        Owner owner = ownerRepository.findByEmail(loginDto.getEmail()).orElseThrow(() -> {
             throw new IllegalStateException("아이디나 비밀번호가 틀렸습니다.");
         });
-        if(!owner.getPassword().equals(ownerDto.getPassword())){
+        if(!owner.getPassword().equals(loginDto.getPassword())){
             throw new IllegalStateException("아이디나 비밀번호가 틀렸습니다.");
         }
         return owner;

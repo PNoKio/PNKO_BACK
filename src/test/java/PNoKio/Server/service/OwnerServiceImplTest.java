@@ -1,6 +1,7 @@
 package PNoKio.Server.service;
 
 import PNoKio.Server.domain.Owner;
+import PNoKio.Server.dto.LoginDto;
 import PNoKio.Server.dto.OwnerDto;
 import PNoKio.Server.dto.StoreDto;
 import PNoKio.Server.exception.EmailDuplicateException;
@@ -68,21 +69,21 @@ class OwnerServiceImplTest {
     void ownerServiceLoginSuccessTest(){
         Owner owner1 = makeOwner("kim", "rkdlem48", "asdf");
         ownerService.create(new OwnerDto(owner1.getEmail(),owner1.getOwnerName(),owner1.getPassword()));
-        Owner login = ownerService.login(new OwnerDto(owner1.getEmail(), owner1.getOwnerName(), owner1.getPassword()));
+        Owner login = ownerService.login(new LoginDto(owner1.getEmail(), owner1.getPassword()));
         assertThat(login.getEmail()).isEqualTo(owner1.getEmail());
     }
     @Test
     void ownerServiceLoginIdFailTest(){
         Owner owner1 = makeOwner("kim", "rkdlem48", "asdf");
         ownerService.create(new OwnerDto(owner1.getEmail(),owner1.getOwnerName(),owner1.getPassword()));
-        assertThatThrownBy(() -> ownerService.login(new OwnerDto("asdf","kim","asdf")))
+        assertThatThrownBy(() -> ownerService.login(new LoginDto(owner1.getEmail(), owner1.getPassword())))
                 .isInstanceOf(IllegalStateException.class);
     }
     @Test
     void ownerServiceLoginPasswordFailTest(){
         Owner owner1 = makeOwner("kim", "rkdlem48", "asdf");
         ownerService.create(new OwnerDto(owner1.getEmail(),owner1.getOwnerName(),owner1.getPassword()));
-        assertThatThrownBy(() -> ownerService.login(new OwnerDto("rkdlem48","kim","aaa")))
+        assertThatThrownBy(() -> ownerService.login(new LoginDto(owner1.getEmail(), owner1.getPassword())))
                 .isInstanceOf(IllegalStateException.class);
     }
 
