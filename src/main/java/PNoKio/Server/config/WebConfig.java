@@ -24,6 +24,6 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(new LocaleChangeInterceptor())
                 .order(1)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/","owner/add","/login","/logout","/css/**","/*.ico","/error");
+                .excludePathPatterns("/login","/css/**","/*.ico","/error");
     }
 }
