@@ -1,5 +1,6 @@
 package PNoKio.Server.service;
 
+import PNoKio.Server.argumentresolver.SessionDto;
 import PNoKio.Server.domain.Category;
 import PNoKio.Server.domain.Owner;
 import PNoKio.Server.domain.Store;
@@ -41,9 +42,9 @@ class CategoryServiceTest {
     @Test
     void addCategorySuccess(){
         Owner owner1 = makeOwner("kim", "rkdlem48", "asdf");
-        ownerService.create(new OwnerDto(owner1.getEmail(),owner1.getOwnerName(), owner1.getPassword()));
+        Long aLong = ownerService.create(new OwnerDto(owner1.getEmail(), owner1.getOwnerName(), owner1.getPassword()));
         storeService.addStore(new StoreDto("스타벅스", "상명")
-                ,new OwnerDto(owner1.getEmail(),owner1.getOwnerName(), owner1.getPassword()));
+                ,new SessionDto(aLong,owner1.getEmail()));
         Store store = storeRepository.findByStoreNameAndStoreBranch("스타벅스", "상명").get();
         categoryService.addCategory(store.getId(),new CategoryDto("커피"));
         Category coffee = categoryRepository.findByCategoryNameAndStoreId(store.getId(), "커피").get();
@@ -53,9 +54,9 @@ class CategoryServiceTest {
     @Test
     void addCategoryDuplicateCategoryNameFail(){
         Owner owner1 = makeOwner("kim", "rkdlem48", "asdf");
-        ownerService.create(new OwnerDto(owner1.getEmail(),owner1.getOwnerName(), owner1.getPassword()));
+        Long aLong = ownerService.create(new OwnerDto(owner1.getEmail(), owner1.getOwnerName(), owner1.getPassword()));
         storeService.addStore(new StoreDto("스타벅스", "상명")
-                ,new OwnerDto(owner1.getEmail(),owner1.getOwnerName(), owner1.getPassword()));
+                ,new SessionDto(aLong,owner1.getEmail()));
         Store store = storeRepository.findByStoreNameAndStoreBranch("스타벅스", "상명").get();
         categoryService.addCategory(store.getId(),new CategoryDto("커피"));
         assertThatThrownBy(() ->         categoryService.addCategory(store.getId(),new CategoryDto("커피")))
@@ -65,9 +66,9 @@ class CategoryServiceTest {
     @Test
     void updateCategoryNameSuccess(){
         Owner owner1 = makeOwner("kim", "rkdlem48", "asdf");
-        ownerService.create(new OwnerDto(owner1.getEmail(),owner1.getOwnerName(), owner1.getPassword()));
+        Long aLong = ownerService.create(new OwnerDto(owner1.getEmail(), owner1.getOwnerName(), owner1.getPassword()));
         storeService.addStore(new StoreDto("스타벅스", "상명")
-                ,new OwnerDto(owner1.getEmail(),owner1.getOwnerName(), owner1.getPassword()));
+                ,new SessionDto(aLong,owner1.getEmail()));
         Store store = storeRepository.findByStoreNameAndStoreBranch("스타벅스", "상명").get();
         categoryService.addCategory(store.getId(),new CategoryDto("커피"));
         Category category = categoryRepository.findByCategoryNameAndStoreId(store.getId(), "커피").get();
@@ -78,9 +79,9 @@ class CategoryServiceTest {
     @Test
     void updateCategoryNameDuplicateFail(){
         Owner owner1 = makeOwner("kim", "rkdlem48", "asdf");
-        ownerService.create(new OwnerDto(owner1.getEmail(),owner1.getOwnerName(), owner1.getPassword()));
+        Long aLong = ownerService.create(new OwnerDto(owner1.getEmail(), owner1.getOwnerName(), owner1.getPassword()));
         storeService.addStore(new StoreDto("스타벅스", "상명")
-                ,new OwnerDto(owner1.getEmail(),owner1.getOwnerName(), owner1.getPassword()));
+                ,new SessionDto(aLong,owner1.getEmail()));
 
         Store store = storeRepository.findByStoreNameAndStoreBranch("스타벅스", "상명").get();
         categoryService.addCategory(store.getId(),new CategoryDto("커피"));
@@ -92,9 +93,9 @@ class CategoryServiceTest {
     @Test
     void removeCategory(){
         Owner owner1 = makeOwner("kim", "rkdlem48", "asdf");
-        ownerService.create(new OwnerDto(owner1.getEmail(),owner1.getOwnerName(), owner1.getPassword()));
+        Long aLong = ownerService.create(new OwnerDto(owner1.getEmail(), owner1.getOwnerName(), owner1.getPassword()));
         storeService.addStore(new StoreDto("스타벅스", "상명")
-                ,new OwnerDto(owner1.getEmail(),owner1.getOwnerName(), owner1.getPassword()));
+                ,new SessionDto(aLong,owner1.getEmail()));
         Store store = storeRepository.findByStoreNameAndStoreBranch("스타벅스", "상명").get();
         categoryService.addCategory(store.getId(),new CategoryDto("커피"));
         List<Category> all = categoryRepository.findAll();

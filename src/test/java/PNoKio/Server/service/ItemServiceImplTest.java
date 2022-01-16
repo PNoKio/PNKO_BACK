@@ -1,5 +1,6 @@
 package PNoKio.Server.service;
 
+import PNoKio.Server.argumentresolver.SessionDto;
 import PNoKio.Server.domain.Category;
 import PNoKio.Server.domain.Item;
 import PNoKio.Server.domain.Owner;
@@ -47,9 +48,9 @@ class ItemServiceImplTest {
     @Test
     void addItemSuccess(){
         Owner owner1 = makeOwner("kim", "rkdlem48", "asdf");
-        ownerService.create(new OwnerDto(owner1.getEmail(),owner1.getOwnerName(), owner1.getPassword()));
+        Long aLong = ownerService.create(new OwnerDto(owner1.getEmail(), owner1.getOwnerName(), owner1.getPassword()));
         storeService.addStore(new StoreDto("스타벅스", "상명")
-                ,new OwnerDto(owner1.getEmail(),owner1.getOwnerName(), owner1.getPassword()));
+                ,new SessionDto(aLong,owner1.getEmail()));
         Store store = storeRepository.findByStoreNameAndStoreBranch("스타벅스", "상명").get();
         categoryService.addCategory(store.getId(),new CategoryDto("커피"));
 
@@ -72,9 +73,9 @@ class ItemServiceImplTest {
     @Test
     void addItemFailDuplicateItemName(){
         Owner owner1 = makeOwner("kim", "rkdlem48", "asdf");
-        ownerService.create(new OwnerDto(owner1.getEmail(),owner1.getOwnerName(), owner1.getPassword()));
+        Long aLong = ownerService.create(new OwnerDto(owner1.getEmail(), owner1.getOwnerName(), owner1.getPassword()));
         storeService.addStore(new StoreDto("스타벅스", "상명")
-                ,new OwnerDto(owner1.getEmail(),owner1.getOwnerName(), owner1.getPassword()));
+                ,new SessionDto(aLong,owner1.getEmail()));
         Store store = storeRepository.findByStoreNameAndStoreBranch("스타벅스", "상명").get();
         categoryService.addCategory(store.getId(),new CategoryDto("커피"));
 
@@ -88,9 +89,9 @@ class ItemServiceImplTest {
     @Test
     void updateItemSuccess(){
         Owner owner1 = makeOwner("kim", "rkdlem48", "asdf");
-        ownerService.create(new OwnerDto(owner1.getEmail(),owner1.getOwnerName(), owner1.getPassword()));
+        Long aLong = ownerService.create(new OwnerDto(owner1.getEmail(), owner1.getOwnerName(), owner1.getPassword()));
         storeService.addStore(new StoreDto("스타벅스", "상명")
-                ,new OwnerDto(owner1.getEmail(),owner1.getOwnerName(), owner1.getPassword()));
+                ,new SessionDto(aLong,owner1.getEmail()));
         Store store = storeRepository.findByStoreNameAndStoreBranch("스타벅스", "상명").get();
         categoryService.addCategory(store.getId(),new CategoryDto("커피"));
 
@@ -111,9 +112,9 @@ class ItemServiceImplTest {
     @Test
     void updateItemFailDuplicateName(){
         Owner owner1 = makeOwner("kim", "rkdlem48", "asdf");
-        ownerService.create(new OwnerDto(owner1.getEmail(),owner1.getOwnerName(), owner1.getPassword()));
+        Long aLong = ownerService.create(new OwnerDto(owner1.getEmail(), owner1.getOwnerName(), owner1.getPassword()));
         storeService.addStore(new StoreDto("스타벅스", "상명")
-                ,new OwnerDto(owner1.getEmail(),owner1.getOwnerName(), owner1.getPassword()));
+                ,new SessionDto(aLong,owner1.getEmail()));
         Store store = storeRepository.findByStoreNameAndStoreBranch("스타벅스", "상명").get();
         categoryService.addCategory(store.getId(),new CategoryDto("커피"));
 
@@ -129,9 +130,9 @@ class ItemServiceImplTest {
     @Test
     void findAllItemAndCategory(){
         Owner owner1 = makeOwner("kim", "rkdlem48", "asdf");
-        ownerService.create(new OwnerDto(owner1.getEmail(),owner1.getOwnerName(), owner1.getPassword()));
+        Long aLong = ownerService.create(new OwnerDto(owner1.getEmail(), owner1.getOwnerName(), owner1.getPassword()));
         storeService.addStore(new StoreDto("스타벅스", "상명")
-                ,new OwnerDto(owner1.getEmail(),owner1.getOwnerName(), owner1.getPassword()));
+                ,new SessionDto(aLong,owner1.getEmail()));
         Store store = storeRepository.findByStoreNameAndStoreBranch("스타벅스", "상명").get();
         categoryService.addCategory(store.getId(),new CategoryDto("커피"));
 
