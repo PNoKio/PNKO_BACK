@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -19,6 +21,11 @@ public class StoreServiceImpl implements StoreService{
 
     private final OwnerRepository ownerRepository;
     private final StoreRepository storeRepository;
+
+    @Override
+    public List<Store> findStores() {
+        return storeRepository.findAll();
+    }
 
     @Override
     public void addStore(StoreDto storeDto, OwnerDto ownerDto) {
@@ -49,4 +56,6 @@ public class StoreServiceImpl implements StoreService{
         );
         store.update(storeUpdateDto);
     }
+
+
 }

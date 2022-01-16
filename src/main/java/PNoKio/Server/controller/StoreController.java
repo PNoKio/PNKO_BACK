@@ -1,5 +1,9 @@
 package PNoKio.Server.controller;
 
+import PNoKio.Server.domain.Store;
+import PNoKio.Server.dto.OwnerDto;
+import PNoKio.Server.dto.StoreDto;
+import PNoKio.Server.service.StoreService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Setter;
@@ -11,27 +15,35 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Controller
 @Slf4j
-@RequestMapping("/store")
+@RequestMapping("/stores")
+@AllArgsConstructor
 public class StoreController {
 
+    private final StoreService storeService;
 
-    @GetMapping("/")
+    @GetMapping("")
     public String home(Model model){
         // 매장 목록 반환
-        List<StoreDto> stores = new ArrayList<>();
-        stores.add(new StoreDto(1L,"카페드림", "상명대점", "donggo2342"));
-        stores.add(new StoreDto(2L,"블루포트", "국민대점", "suminlee08"));
+        List<StoreDto> stores = storeService.findStores().stream().map(input ->
+                new StoreDto(input.getId(),
+                        input.getStoreName(),
+                        input.getBranch(),
+                        input.getOwner().toString())).collect(Collectors.toList());
         model.addAttribute("stores", stores);
         return "home";
     }
 
-    @GetMapping("/stores/new")
-    public String createStore(Model model){
+    @GetMapping("/new")
+    public String createStoreForm(Model model){
+        // owner 관련
         List<String> owners = new ArrayList<>();
         owners.add("donggoo2342");
         owners.add("suminlee08");
@@ -40,6 +52,24 @@ public class StoreController {
         model.addAttribute("storeForm", new StoreForm());
 
         return "stores/createStore";
+    }
+
+    @PostMapping("/new")
+    public String createStore(StoreForm form) {
+        PNoKio.Server.dto.StoreDto store = new PNoKio.Server.dto.StoreDto(
+                form.storeName,
+                form.branch
+        );
+
+        OwnerDto owner = new OwnerDto(
+                "yoonho@gmail.com",
+                "윤호",
+                "1234"
+        );
+
+        storeService.addStore(store, owner);
+
+        return "redirect:/stores";
     }
 
     @Data
