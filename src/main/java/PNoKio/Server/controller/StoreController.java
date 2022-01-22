@@ -2,6 +2,9 @@ package PNoKio.Server.controller;
 
 import PNoKio.Server.argumentresolver.Login;
 import PNoKio.Server.argumentresolver.SessionDto;
+import PNoKio.Server.repository.OwnerRepository;
+import PNoKio.Server.repository.StoreRepository;
+import PNoKio.Server.service.OwnerService;
 import PNoKio.Server.service.StoreService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,18 +26,8 @@ import java.util.stream.Collectors;
 public class StoreController {
 
     private final StoreService storeService;
-
-    @GetMapping("/")
-    public String home(Model model){
-        // 매장 목록 반환
-        List<StoreDto> stores = storeService.findStores().stream().map(input ->
-                new StoreDto(input.getId(),
-                        input.getStoreName(),
-                        input.getBranch(),
-                        input.getOwner().toString())).collect(Collectors.toList());
-        model.addAttribute("stores", stores);
-        return "/home";
-    }
+    private final StoreRepository storeRepository;
+    private final OwnerRepository ownerRepository;
 
     @GetMapping("/new")
     public String createStoreForm(Model model){
@@ -56,7 +49,6 @@ public class StoreController {
                 form.branch
         );
         storeService.addStore(store, sessionDto);
-
         return "redirect:/";
     }
 
