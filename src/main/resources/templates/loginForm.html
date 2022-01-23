@@ -23,7 +23,7 @@
         <h2>로그인</h2>
     </div>
 
-    <form action="" th:action th:object="${loginDto}" method="post">
+    <form id="login-form" th:action th:object="${loginDto}" method="post">
 
         <div th:if="${#fields.hasGlobalErrors()}">
             <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">전체 오류 메시지</p>
@@ -60,4 +60,34 @@
 
 </div> <!-- /container -->
 </body>
+
+<script>
+    $(function(){
+        $('#login-form').submit(function(event){
+            event.preventDefault();
+            const email = $('#email').val();
+            const password = $('#password').val();
+
+            $.ajaxSettings.traditional = true;
+            $.ajax({
+                url : "",
+                type : "post",
+                dataType : "json",
+                data : {
+                    email : email,
+                    password : password
+                },
+                contentType : "application/x-www-form-urlencoded; charset=utf-8",
+                data_type : "json",
+                success : function(response) {
+                    console.log(response);
+                }, error : function(jqXHR, status, e) {
+                    console.error(status + " : " + e);
+                }
+
+            });
+        });
+    });
+
+</script>
 </html>
