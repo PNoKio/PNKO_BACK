@@ -3,6 +3,7 @@ package PNoKio.Server.service;
 import PNoKio.Server.domain.Category;
 import PNoKio.Server.domain.Store;
 import PNoKio.Server.dto.CategoryDto;
+import PNoKio.Server.dto.CategoryNameDto;
 import PNoKio.Server.dto.CategoryUpdateDto;
 import PNoKio.Server.exception.DuplicateCategoryNameInStore;
 import PNoKio.Server.repository.CategoryRepository;
@@ -10,6 +11,9 @@ import PNoKio.Server.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -47,5 +51,13 @@ public class CategoryServiceImpl implements CategoryService{
     @Override
     public void removeCategory(Long categoryId) {
         categoryRepository.deleteById(categoryId);
+    }
+
+    @Override
+    public List<CategoryNameDto> findAllCategoryName(Long storeId) {
+        Store store = storeRepository.findById(storeId).get();
+        List<Category> categories = store.getCategories();
+        return categories.stream().map(a -> new CategoryNameDto(a.getCategoryName()))
+                .collect(Collectors.toList());
     }
 }
