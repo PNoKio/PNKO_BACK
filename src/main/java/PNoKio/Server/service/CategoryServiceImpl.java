@@ -60,4 +60,10 @@ public class CategoryServiceImpl implements CategoryService{
         return categories.stream().map(a -> new CategoryNameDto(a.getCategoryName()))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<Category> findAllCategory(Long storeId) {
+        return categoryRepository.findAll();
+
+    }
 }

@@ -13,5 +13,5 @@ public interface StoreService {
     void addStore(StoreDto storeDto, SessionDto sessionDto);
     void removeStore(StoreDto storeDto);
     void UpdateStore(Long storeId,StoreUpdateDto storeUpdateDto);
-    Optional<Store> findCategoryAndItem(Long storeId);
+    Store findByStoreId(Long storeId);
 }

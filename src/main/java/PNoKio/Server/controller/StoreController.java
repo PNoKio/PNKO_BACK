@@ -31,12 +31,6 @@ public class StoreController {
 
     @GetMapping("/new")
     public String createStoreForm(Model model){
-        // owner 관련
-        List<String> owners = new ArrayList<>();
-        owners.add("donggoo2342");
-        owners.add("suminlee08");
-        owners.add("boorubda2909");
-        model.addAttribute("owners", owners);
         model.addAttribute("storeForm", new StoreForm());
 
         return "stores/createStore";

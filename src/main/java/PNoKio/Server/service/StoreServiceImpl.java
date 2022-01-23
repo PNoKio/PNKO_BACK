@@ -60,8 +60,8 @@ public class StoreServiceImpl implements StoreService{
     }
 
     @Override
-    public Optional<Store> findCategoryAndItem(Long storeId) {
-        return storeRepository.findCategoryAndItemByStoreId(storeId);
+    public Store findByStoreId(Long storeId) {
+        return storeRepository.findById(storeId).get();
     }
 
 

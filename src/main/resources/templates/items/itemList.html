@@ -36,8 +36,8 @@
       <tbody>
       <tr th:each="item : ${items}">
         <!-- ? : null 이면 표시 안함-->
-        <td th:text="${item.category.getCategoryName()}"></td>
-        <td th:text="${item.itemName}"></td>
+        <td th:text="${item.category}"></td>
+        <td th:text="${item.name}"></td>
         <td th:text="${item.price}"></td>
         <td th:text="${item.status}"></td>
         <td>

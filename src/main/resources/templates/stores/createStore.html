@@ -26,12 +26,6 @@
             <p th:if="${#fields.hasErrors('branch')}"
                th:errors="*{branch}">Incorrect date</p>
         </div>
-        <div class="form-group">
-            <label th:for="owner">오너</label> <br/>
-            <select>
-                <option th:each="ow : ${owners}" th:text="${ow}"></option>
-            </select>
-        </div>
         <button type="submit" class="btn btn-primary">매장 등록</button>
     </form>
     <br/>

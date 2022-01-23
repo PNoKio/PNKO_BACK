@@ -24,7 +24,7 @@ public class APIController {
     private final RestTemplate restTemplate;
     @GetMapping("/")
     public List<APIMenuDto> getCategoryAndItem(@RequestParam (name = "storeId") Long storeId){
-        Store store = storeService.findCategoryAndItem(storeId).get();
+        Store store = storeService.findByStoreId(storeId);
         return store.getCategories().stream().map(a -> new APIMenuDto(a.getCategoryName(),a.getItems()))
                 .collect(Collectors.toList());
     }
