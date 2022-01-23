@@ -1,8 +1,10 @@
 package PNoKio.Server.controller;
 
 import PNoKio.Server.domain.Owner;
+import PNoKio.Server.dto.ErrorMessage;
 import PNoKio.Server.dto.LoginDto;
 import PNoKio.Server.dto.OwnerDto;
+import PNoKio.Server.exception.EmailDuplicateException;
 import PNoKio.Server.service.OwnerService;
 import PNoKio.Server.service.StoreService;
 import PNoKio.Server.session.SessionConst;
@@ -39,12 +41,19 @@ public class OwnerController {
     }
 
     @GetMapping("/signup")
-    public String signup(@ModelAttribute (name = "ownerDto") OwnerDto ownerDto){
+    public String signup(@ModelAttribute (name = "ownerDto") OwnerDto ownerDto,
+                         @RequestParam(defaultValue = "notError") String errorMessage,Model model){
+        if(!errorMessage.equals("notError")){
+            ErrorMessage errorMessage1 = new ErrorMessage("이미 가입된 이메일입니다.");
+            model.addAttribute("errorMessage", errorMessage1);
+        }
         return "/ownerForm";
     }
 
     @PostMapping("/signup")
-    public String save(@Validated @ModelAttribute(name = "ownerDto") OwnerDto ownerDto, BindingResult bindingResult ){
+    public String save(@Validated @ModelAttribute(name = "ownerDto") OwnerDto ownerDto, BindingResult bindingResult
+    , Model model)throws
+            EmailDuplicateException {
 
         if(bindingResult.hasErrors()){
             bindingResult.reject("loginFail", "아이디 양식은 email 입니다.");
@@ -57,23 +66,21 @@ public class OwnerController {
 
 
     @GetMapping("/login")
-    public String loginForm(@ModelAttribute("loginDto") LoginDto loginDto){
+    public String loginForm(@ModelAttribute("loginDto") LoginDto loginDto,Model model
+    ,@RequestParam(defaultValue = "notError") String errorMessage){
+
+        if(!errorMessage.equals("notError")){
+            ErrorMessage errorMessage1 = new ErrorMessage("아이디 혹은 비밀번호가 틀렸습니다.");
+            model.addAttribute("errorMessage", errorMessage1);
+        }
         return "/loginForm";
     }
 
     @PostMapping("/login")
-    public String login(@Validated @ModelAttribute(name = "loginDto")LoginDto loginDto, BindingResult bindingResult,
+    public String login(@Validated @ModelAttribute(name = "loginDto")LoginDto loginDto,
                         @RequestParam(defaultValue = "/") String redirectURL,
-                        HttpServletRequest request){
-        if(bindingResult.hasErrors()){
-            return "/loginForm";
-        }
-
+                        HttpServletRequest request, Model model) throws IllegalStateException{
         Owner owner = ownerService.login(loginDto);
-        if(owner ==null ){
-            bindingResult.reject("loginFail","아이디 혹은 비밀번호가 틀렸습니다.");
-            return "/loginForm";
-        }
         HttpSession session = request.getSession();
         session.setAttribute(SessionConst.LOGIN_MEMBER,new PNoKio.Server.argumentresolver.SessionDto(owner.getId(),owner.getEmail()));
         return "redirect:"+redirectURL;

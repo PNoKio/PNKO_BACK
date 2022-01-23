@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -56,6 +57,11 @@ public class StoreServiceImpl implements StoreService{
                 }
         );
         store.update(storeUpdateDto);
+    }
+
+    @Override
+    public Optional<Store> findCategoryAndItem(Long storeId) {
+        return storeRepository.findCategoryAndItemByStoreId(storeId);
     }
 
 

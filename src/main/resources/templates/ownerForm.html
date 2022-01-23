@@ -23,14 +23,17 @@
         <h2>회원 가입</h2>
     </div>
 
-    <h4 class="mb-3">회원 정보 입력</h4>
 
+    <h4 class="mb-3">회원 정보 입력</h4>
     <form action="" th:action th:object="${ownerDto}" method="post">
 
         <div th:if="${#fields.hasGlobalErrors()}">
             <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">전체 오류 메시지</p>
         </div>
 
+        <tr th:each="errorMessage : ${errorMessage}">
+            <td th:text="${errorMessage.errorMessage}"></td>
+        </tr>
         <div>
             <label for="email">로그인 ID</label>
             <input type="text" id="email" th:field="*{email}" class="form-control"

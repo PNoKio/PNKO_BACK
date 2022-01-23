@@ -6,10 +6,12 @@ import PNoKio.Server.dto.StoreDto;
 import PNoKio.Server.dto.StoreUpdateDto;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface StoreService {
     List<Store> findStores();
     void addStore(StoreDto storeDto, SessionDto sessionDto);
     void removeStore(StoreDto storeDto);
     void UpdateStore(Long storeId,StoreUpdateDto storeUpdateDto);
+    Optional<Store> findCategoryAndItem(Long storeId);
 }
