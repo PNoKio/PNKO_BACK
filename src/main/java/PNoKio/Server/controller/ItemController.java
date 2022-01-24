@@ -59,6 +59,8 @@ public class ItemController {
             }
         }
 
+        model.addAttribute("items", items);
+
         return "items/itemList";
     }
 
