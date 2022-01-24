@@ -68,6 +68,7 @@ public class ItemController {
         model.addAttribute("categories", categories);
         model.addAttribute("status", ItemStatus.values());
         model.addAttribute("itemForm", new ItemForm());
+        model.addAttribute("storeId", storeId);
 
         return "items/createItem";
     }
