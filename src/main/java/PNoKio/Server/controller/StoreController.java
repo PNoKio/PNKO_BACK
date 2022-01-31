@@ -1,5 +1,6 @@
 package PNoKio.Server.controller;
 
+import PNoKio.Server.aop.LogMethod;
 import PNoKio.Server.argumentresolver.Login;
 import PNoKio.Server.argumentresolver.SessionDto;
 import PNoKio.Server.repository.OwnerRepository;
@@ -30,6 +31,7 @@ public class StoreController {
     private final OwnerRepository ownerRepository;
 
     @GetMapping("/new")
+    @LogMethod
     public String createStoreForm(Model model){
         model.addAttribute("storeForm", new StoreForm());
 
@@ -37,6 +39,7 @@ public class StoreController {
     }
 
     @PostMapping("/new")
+    @LogMethod
     public String createStore(StoreForm form, @Login SessionDto sessionDto) {
         PNoKio.Server.dto.StoreDto store = new PNoKio.Server.dto.StoreDto(
                 form.storeName,

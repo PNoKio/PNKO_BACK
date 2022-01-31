@@ -1,5 +1,6 @@
 package PNoKio.Server.controller;
 
+import PNoKio.Server.aop.LogMethod;
 import PNoKio.Server.domain.Owner;
 import PNoKio.Server.dto.ErrorMessage;
 import PNoKio.Server.dto.LoginDto;
@@ -28,6 +29,7 @@ public class OwnerController {
     private final StoreService storeService;
 
     @GetMapping("/")
+    @LogMethod
     public String home(Model model){
         // 매장 목록 반환
         List<StoreController.StoreDto> stores = storeService.findStores().stream().map(input ->
@@ -41,6 +43,7 @@ public class OwnerController {
     }
 
     @GetMapping("/signup")
+    @LogMethod
     public String signup(@ModelAttribute (name = "ownerDto") OwnerDto ownerDto,
                          @RequestParam(defaultValue = "notError") String errorMessage,Model model){
         if(!errorMessage.equals("notError")){
@@ -51,6 +54,7 @@ public class OwnerController {
     }
 
     @PostMapping("/signup")
+    @LogMethod
     public String save(@Validated @ModelAttribute(name = "ownerDto") OwnerDto ownerDto, BindingResult bindingResult
     , Model model)throws
             EmailDuplicateException {
@@ -66,6 +70,7 @@ public class OwnerController {
 
 
     @GetMapping("/login")
+    @LogMethod
     public String loginForm(@ModelAttribute("loginDto") LoginDto loginDto,Model model
     ,@RequestParam(defaultValue = "notError") String errorMessage){
 
@@ -77,6 +82,7 @@ public class OwnerController {
     }
 
     @PostMapping("/login")
+    @LogMethod
     public String login(@Validated @ModelAttribute(name = "loginDto")LoginDto loginDto,
                         @RequestParam(defaultValue = "/") String redirectURL,
                         HttpServletRequest request, Model model) throws IllegalStateException{
@@ -87,6 +93,7 @@ public class OwnerController {
     }
 
     @PostMapping("/logout")
+    @LogMethod
     public String logout(HttpServletRequest request){
         HttpSession session = request.getSession(false);
         if(session!=null){

@@ -1,5 +1,6 @@
 package PNoKio.Server.controller;
 
+import PNoKio.Server.aop.LogMethod;
 import PNoKio.Server.domain.Category;
 import PNoKio.Server.domain.Item;
 import PNoKio.Server.domain.ItemStatus;
@@ -35,6 +36,7 @@ public class ItemController {
     private final CategoryService categoryService;
 
     @GetMapping("")
+    @LogMethod
     public String itemList(Model model, @RequestParam Long storeId) {
         Store store = storeService.findByStoreId(storeId);
         StoreDto storeDto = new StoreDto(
@@ -65,6 +67,7 @@ public class ItemController {
     }
 
     @GetMapping("/new")
+    @LogMethod
     public String createItemForm(Model model, @RequestParam Long storeId) {
         List<Category> categories = categoryService.findAllCategory(storeId);
         model.addAttribute("categories", categories);
@@ -74,8 +77,8 @@ public class ItemController {
 
         return "items/createItem";
     }
-
     @PostMapping("/new")
+    @LogMethod
     public String createItem(ItemForm form, @RequestParam Long storeId) {
 
         itemService.addItem(
