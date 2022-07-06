@@ -68,9 +68,6 @@
 ### Entity 설계
 <img src="https://user-images.githubusercontent.com/76467201/171351831-e0216dde-5731-4c17-8848-d625e0718f28.png" width="350" height="350"/>
 
-### API 문서화 
-<img src="https://user-images.githubusercontent.com/76467201/171351835-49d6e6a0-7936-4b96-ba6c-1381bd82c83c.png">
-
 
 ### 아키텍쳐
 <img src="https://user-images.githubusercontent.com/76467201/171351838-ff5b8050-45f5-4b81-9237-108b87880b0a.png"/>
